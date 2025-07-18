@@ -1,0 +1,14 @@
+name: DP-Cash
+version: 1.0.0.0
+main: com.darksoldier1404.dpcash.CashPlugin
+authors: [ DEAD_POOLIO_ ]
+api-version: 1.14
+depend:
+  - DPP-Core
+commands:
+  cash:
+    aliases: [ dpcash, 캐시 ]
+  mileage:
+    aliases: [ dpmileage, 마일리지 ]
+  cashshop:
+    aliases: [ dpcashshop, 캐시상점 ]
