@@ -7,7 +7,7 @@ group 'com.darksoldier1404'
 
 // ##################################################
 
-version = '1.0.0.0'
+version = '1.0.0'
 var pluginName = 'DP-Cash'
 var packageName = 'com.darksoldier1404.dpcash'
 var apiVersion = '1.14.4'
@@ -96,5 +96,5 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     compileOnly "com.bukkit:craftbukkit:" + apiVersion
     compileOnly "com.bukkit:spigot:" + apiVersion
-    compileOnly "com.darksoldier1404.dppc:DPP-Core:4-SNAPSHOT"
+    compileOnly "com.darksoldier1404.dppc:DPP-Core:5.2-SNAPSHOT"
 }

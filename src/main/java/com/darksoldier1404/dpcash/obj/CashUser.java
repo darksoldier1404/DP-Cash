@@ -5,10 +5,11 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.Map;
 
+import com.darksoldier1404.dppc.data.DataCargo;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class CashUser {
-    private final UUID uuid;
+public class CashUser implements DataCargo {
+    private UUID uuid;
     HashMap<Long, CashLog> cashLogs = new HashMap<>();
     private int currentCash;
     private int currentMileage;
@@ -16,6 +17,9 @@ public class CashUser {
     private int totalCashSpent;
     private int totalMileageEarned;
     private int totalMileageSpent;
+
+    public CashUser() {
+    }
 
     public CashUser(UUID uuid) {
         this.uuid = uuid;
@@ -134,6 +138,7 @@ public class CashUser {
         return false;
     }
 
+    @Override
     public YamlConfiguration serialize() {
         YamlConfiguration data = new YamlConfiguration();
         data.set("uuid", uuid.toString());
@@ -152,7 +157,8 @@ public class CashUser {
         return data;
     }
 
-    public static CashUser deserialize(YamlConfiguration data) {
+    @Override
+    public CashUser deserialize(YamlConfiguration data) {
         String suuid = data.getString("uuid");
         if (suuid == null) {
             return null;

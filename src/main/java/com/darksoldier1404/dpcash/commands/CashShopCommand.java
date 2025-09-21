@@ -10,63 +10,68 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.darksoldier1404.dpcash.CashPlugin.prefix;
-import static com.darksoldier1404.dpcash.CashPlugin.shops;
-import static com.darksoldier1404.dpcash.CashPlugin.lang;
+import static com.darksoldier1404.dpcash.CashPlugin.*;
 
 public class CashShopCommand {
-    private final CommandBuilder builder = new CommandBuilder(prefix);
+    private final CommandBuilder builder = new CommandBuilder(plugin);
 
     public CashShopCommand() {
-        builder.addSubCommand("create", "dpcash.admin", lang.get("cashshop_cmd_create"), true, (p, args) -> {
+        builder.addSubCommand("create", "dpcash.admin", plugin.getLang().get("cashshop_cmd_create"), true, (p, args) -> {
             if (args.length == 4) {
                 ShopFunction.createShop((Player) p, args[1], args[2], args[3]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_create_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_create_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("items", "dpcash.admin", lang.get("cashshop_cmd_items"), true, (p, args) -> {
+        builder.addSubCommand("items", "dpcash.admin", plugin.getLang().get("cashshop_cmd_items"), true, (p, args) -> {
             if (args.length == 2) {
                 ShopFunction.openShopItemSetting((Player) p, args[1]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_items_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_items_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("price", "dpcash.admin", lang.get("cashshop_cmd_price"), true, (p, args) -> {
+        builder.addSubCommand("price", "dpcash.admin", plugin.getLang().get("cashshop_cmd_price"), true, (p, args) -> {
             if (args.length == 2) {
                 ShopFunction.openShopPriceSetting((Player) p, args[1]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_price_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_price_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("maxpage", "dpcash.admin", lang.get("cashshop_cmd_maxpage"), true, (p, args) -> {
+        builder.addSubCommand("maxpage", "dpcash.admin", plugin.getLang().get("cashshop_cmd_maxpage"), true, (p, args) -> {
             if (args.length == 3) {
                 ShopFunction.setShopMaxPage((Player) p, args[1], args[2]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_maxpage_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_maxpage_usage"));
             }
+            return true;
         });
         // delete
-        builder.addSubCommand("delete", "dpcash.admin", lang.get("cashshop_cmd_delete"), true, (p, args) -> {
+        builder.addSubCommand("delete", "dpcash.admin", plugin.getLang().get("cashshop_cmd_delete"), true, (p, args) -> {
             if (args.length == 2) {
                 ShopFunction.deleteShop((Player) p, args[1]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_delete_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_delete_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("reload", "dpcash.admin", lang.get("cashshop_cmd_reload"), (p, args) -> {
+        builder.addSubCommand("reload", "dpcash.admin", plugin.getLang().get("cashshop_cmd_reload"), (p, args) -> {
             if (args.length == 1) {
-                CommonFunction.init();
+                plugin.init();
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_reload_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_reload_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("open", "dpcash.user", lang.get("cashshop_cmd_open"), true, (p, args) -> {
+        builder.addSubCommand("open", "dpcash.user", plugin.getLang().get("cashshop_cmd_open"), true, (p, args) -> {
             if (args.length == 2) {
                 ShopFunction.openShop((Player) p, args[1]);
             } else {
-                p.sendMessage(prefix + lang.get("cashshop_cmd_open_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_open_usage"));
             }
+            return true;
         });
         for (String c : builder.getSubCommandNames()) {
             builder.addTabCompletion(c, (sender, args) -> {

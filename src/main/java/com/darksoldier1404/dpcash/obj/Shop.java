@@ -2,6 +2,7 @@ package com.darksoldier1404.dpcash.obj;
 
 import com.darksoldier1404.dpcash.enums.ShopType;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.data.DataCargo;
 import com.darksoldier1404.dppc.utils.ConfigUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -12,13 +13,16 @@ import java.util.Set;
 
 import static com.darksoldier1404.dpcash.CashPlugin.plugin;
 
-public class Shop {
+public class Shop implements DataCargo {
     private String name;
     private String title;
     private int size;
     private ShopType type;
     private DInventory inventory;
     private Set<ShopPrices> prices = new HashSet<>();
+
+    public Shop() {
+    }
 
     public Shop(String name, String title, int size, ShopType type) {
         this.name = name;
@@ -113,7 +117,8 @@ public class Shop {
         return null;
     }
 
-    public void save() {
+    @Override
+    public Object serialize() {
         YamlConfiguration data = new YamlConfiguration();
         data.set("name", name);
         data.set("title", title);
@@ -129,9 +134,11 @@ public class Shop {
         }
         data = inventory.serialize(data);
         ConfigUtils.saveCustomData(plugin, data, name, "shops");
+        return data;
     }
 
-    public static Shop load(YamlConfiguration data) {
+    @Override
+    public Shop deserialize(YamlConfiguration data) {
         String name = data.getString("name");
         String title = data.getString("title");
         int size = data.getInt("size");

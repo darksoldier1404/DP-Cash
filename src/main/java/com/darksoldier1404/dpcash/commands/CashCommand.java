@@ -8,65 +8,74 @@ import org.bukkit.OfflinePlayer;
 import static com.darksoldier1404.dpcash.CashPlugin.*;
 
 public class CashCommand {
-    private final CommandBuilder builder = new CommandBuilder(prefix);
+    private final CommandBuilder builder = new CommandBuilder(plugin);
 
     public CashCommand() {
-        builder.addSubCommand("give", "dpcash.admin", lang.get("cash_cmd_give"), (p, args) -> {
+        builder.addSubCommand("give", "dpcash.admin", plugin.getLang().get("cash_cmd_give"), (p, args) -> {
             if (args.length == 3) {
                 if (args[2].matches("\\d+")) {
                     OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);
                     int amount = Integer.parseInt(args[2]);
                     CashFunction.giveCash(p, target, amount);
                 } else {
-                    p.sendMessage(prefix + lang.get("cash_cmd_amount_number"));
+                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_amount_number"));
                 }
+                return true;
             }
+            return false;
         });
-        builder.addSubCommand("take", "dpcash.admin", lang.get("cash_cmd_take"), (p, args) -> {
+        builder.addSubCommand("take", "dpcash.admin", plugin.getLang().get("cash_cmd_take"), (p, args) -> {
             if (args.length == 3) {
                 if (args[2].matches("\\d+")) {
                     OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);
                     int amount = Integer.parseInt(args[2]);
                     CashFunction.takeCash(p, target, amount);
                 } else {
-                    p.sendMessage(prefix + lang.get("cash_cmd_amount_number"));
+                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_amount_number"));
                 }
+                return true;
             }
+            return false;
         });
-        builder.addSubCommand("set", "dpcash.admin", lang.get("cash_cmd_set"), (p, args) -> {
+        builder.addSubCommand("set", "dpcash.admin", plugin.getLang().get("cash_cmd_set"), (p, args) -> {
             if (args.length == 3) {
                 if (args[2].matches("\\d+")) {
                     OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);
                     int amount = Integer.parseInt(args[2]);
                     CashFunction.setCash(p, target, amount);
                 } else {
-                    p.sendMessage(prefix + lang.get("cash_cmd_amount_number"));
+                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_amount_number"));
                 }
+                return true;
             }
+            return false;
         });
-        builder.addSubCommand("info", "dpcash.admin", lang.get("cash_cmd_info"), (p, args) -> {
+        builder.addSubCommand("info", "dpcash.admin", plugin.getLang().get("cash_cmd_info"), (p, args) -> {
             if (args.length == 2) {
                 OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);
                 CashFunction.infoCash(p, target);
             } else {
-                p.sendMessage(prefix + lang.get("cash_cmd_info_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_info_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("my", "dpcash.user", lang.get("cash_cmd_my"), (p, args) -> {
+        builder.addSubCommand("my", "dpcash.user", plugin.getLang().get("cash_cmd_my"), (p, args) -> {
             if (args.length == 1) {
                 OfflinePlayer target = (OfflinePlayer) p;
                 CashFunction.infoCash(p, target);
             } else {
-                p.sendMessage(prefix + lang.get("cash_cmd_my_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_my_usage"));
             }
+            return true;
         });
-        builder.addSubCommand("reset", "dpcash.admin", lang.get("cash_cmd_reset"), (p, args) -> {
+        builder.addSubCommand("reset", "dpcash.admin", plugin.getLang().get("cash_cmd_reset"), (p, args) -> {
             if (args.length == 2) {
                 OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);
                 CashFunction.resetCash(p, target);
             } else {
-                p.sendMessage(prefix + lang.get("cash_cmd_reset_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cash_cmd_reset_usage"));
             }
+            return true;
         });
     }
 

@@ -23,16 +23,16 @@ import static com.darksoldier1404.dpcash.CashPlugin.*;
 public class ShopFunction {
     public static void createShop(Player p, String shopName, String shopSize, String shopType) {
         if (isShopExists(shopName)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_exists", shopName));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_exists", shopName));
             return;
         }
         if (!shopSize.matches("^[0-9]+$")) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_invalid_size"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_invalid_size"));
             return;
         }
         int size = Integer.parseInt(shopSize);
         if (size < 2 || size > 6) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_size_range"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_size_range"));
             return;
         }
         ShopType type = ShopType.valueOf(shopType.toUpperCase());
@@ -40,11 +40,11 @@ public class ShopFunction {
         data.set("name", shopName);
         data.set("size", size);
         data.set("type", type.name());
-        Shop shop = new Shop(shopName, lang.getWithArgs("shop_title", shopName), size, type);
-        shop.setInventory(new DInventory(lang.getWithArgs("shop_title", shopName), size * 9, true, plugin));
+        Shop shop = new Shop(shopName, plugin.getLang().getWithArgs("shop_title", shopName), size, type);
+        shop.setInventory(new DInventory(plugin.getLang().getWithArgs("shop_title", shopName), size * 9, true, plugin));
         shops.put(shopName, shop);
         saveShops();
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_create_success", shopName, String.valueOf(size), type.name()));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_create_success", shopName, String.valueOf(size), type.name()));
     }
 
     public static boolean isShopExists(String shopName) {
@@ -60,14 +60,12 @@ public class ShopFunction {
     }
 
     public static void saveShops() {
-        for (Shop s : shops.values()) {
-            s.save();
-        }
+        plugin.saveDataContainer();
     }
 
     public static void openShop(Player p, String name) {
         if (!isShopExists(name)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", name));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
             return;
         }
         Shop shop = shops.get(name);
@@ -86,11 +84,11 @@ public class ShopFunction {
 
     public static void openShopItemSetting(Player p, String name) {
         if (!isShopExists(name)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", name));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
             return;
         }
         DInventory inv = shops.get(name).getInventory().clone();
-        inv.updateTitle(lang.getWithArgs("shop_item_setting_title", name));
+        inv.updateTitle(plugin.getLang().getWithArgs("shop_item_setting_title", name));
         inv.setObj(name);
         inv.setChannel(1);
         inv.setCurrentPage(0);
@@ -102,7 +100,7 @@ public class ShopFunction {
     public static void saveShopItems(Player p, DInventory inv) {
         String shopName = (String) inv.getObj();
         if (!isShopExists(shopName)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", shopName));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", shopName));
             return;
         }
         inv.applyChanges();
@@ -110,7 +108,7 @@ public class ShopFunction {
         shop.setInventory(inv);
         shops.put(shopName, shop);
         saveShops();
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_save_success"));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_save_success"));
     }
 
     public static ItemStack[] getPageTools() {
@@ -138,7 +136,7 @@ public class ShopFunction {
 
     public static void openShopPriceSetting(Player p, String name) {
         if (!isShopExists(name)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", name));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
             return;
         }
         Shop shop = shops.get(name);
@@ -163,12 +161,12 @@ public class ShopFunction {
             List<String> lore = item.getItemMeta().hasLore() ? meta.getLore() : new ArrayList<>();
             if (lore != null) {
                 if (shop.getType() == ShopType.CASH || shop.getType() == ShopType.HYBRID) {
-                    lore.add(lang.getWithArgs("shop_lore_cash_buy", price != null && price.getCashBuyPrice() != 0 ? String.valueOf(price.getCashBuyPrice()) : lang.getWithArgs("shop_lore_cant_buy")));
-                    lore.add(lang.getWithArgs("shop_lore_cash_sell", price != null && price.getCashSellPrice() != 0 ? String.valueOf(price.getCashSellPrice()) : lang.getWithArgs("shop_lore_cant_sell")));
+                    lore.add(plugin.getLang().getWithArgs("shop_lore_cash_buy", price != null && price.getCashBuyPrice() != 0 ? String.valueOf(price.getCashBuyPrice()) : plugin.getLang().getWithArgs("shop_lore_cant_buy")));
+                    lore.add(plugin.getLang().getWithArgs("shop_lore_cash_sell", price != null && price.getCashSellPrice() != 0 ? String.valueOf(price.getCashSellPrice()) : plugin.getLang().getWithArgs("shop_lore_cant_sell")));
                 }
                 if (shop.getType() == ShopType.MILEAGE || shop.getType() == ShopType.HYBRID) {
-                    lore.add(lang.getWithArgs("shop_lore_mileage_buy", price != null && price.getMileageBuyPrice() != 0 ? String.valueOf(price.getMileageBuyPrice()) : lang.getWithArgs("shop_lore_cant_buy")));
-                    lore.add(lang.getWithArgs("shop_lore_mileage_sell", price != null && price.getMileageSellPrice() != 0 ? String.valueOf(price.getMileageSellPrice()) : lang.getWithArgs("shop_lore_cant_sell")));
+                    lore.add(plugin.getLang().getWithArgs("shop_lore_mileage_buy", price != null && price.getMileageBuyPrice() != 0 ? String.valueOf(price.getMileageBuyPrice()) : plugin.getLang().getWithArgs("shop_lore_cant_buy")));
+                    lore.add(plugin.getLang().getWithArgs("shop_lore_mileage_sell", price != null && price.getMileageSellPrice() != 0 ? String.valueOf(price.getMileageSellPrice()) : plugin.getLang().getWithArgs("shop_lore_cant_sell")));
                 }
             }
             meta.setLore(lore);
@@ -214,23 +212,23 @@ public class ShopFunction {
 
     public static void setShopMaxPage(Player p, String name, String maxPage) {
         if (!isShopExists(name)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", name));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
             return;
         }
         if (!maxPage.matches("^[0-9]+$")) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_invalid_maxpage"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_invalid_maxpage"));
             return;
         }
         int page = Integer.parseInt(maxPage);
         if (page < 0) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_maxpage_range"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_maxpage_range"));
             return;
         }
         Shop shop = shops.get(name);
         shop.getInventory().setPages(page);
         shops.put(name, shop);
         saveShops();
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_maxpage_set", name, String.valueOf(page)));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_maxpage_set", name, String.valueOf(page)));
     }
 
     @Nullable
@@ -256,104 +254,104 @@ public class ShopFunction {
             return false;
         }
         if (currency == Currency.CASH) {
-            return cashUsers.get(p.getUniqueId()).getCurrentCash() >= price.getCashBuyPrice();
+            return udata.get(p.getUniqueId()).getCurrentCash() >= price.getCashBuyPrice();
         } else if (currency == Currency.MILEAGE) {
-            return cashUsers.get(p.getUniqueId()).getCurrentMileage() >= price.getMileageBuyPrice();
+            return udata.get(p.getUniqueId()).getCurrentMileage() >= price.getMileageBuyPrice();
         }
         return false;
     }
 
     public static boolean buyItem(Player p, String shopName, int page, int slot, Currency currency) {
         if (!isShopExists(shopName)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", shopName));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", shopName));
             return false;
         }
         Shop shop = shops.get(shopName);
         ShopPrices price = shop.findPrice(page, slot);
         if (price == null) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_price"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_price"));
             return false;
         }
         if (currency == Currency.CASH && price.getCashBuyPrice() <= 0) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_cash_buy"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_cash_buy"));
             return false;
         }
         if (currency == Currency.MILEAGE && price.getMileageBuyPrice() <= 0) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_mileage_buy"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_mileage_buy"));
             return false;
         }
         ItemStack item = shop.findItem(page, slot);
         if (item == null || item.getType() == org.bukkit.Material.AIR) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_item"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_item"));
             return false;
         }
         if (!InventoryUtils.hasEnoughSpace(p.getInventory().getStorageContents(), item)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_space"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_space"));
             return false;
         }
         if (currency == Currency.CASH) {
-            if (cashUsers.get(p.getUniqueId()).getCurrentCash() < price.getCashBuyPrice()) {
-                p.sendMessage(prefix + lang.getWithArgs("shop_err_no_cash"));
+            if (udata.get(p.getUniqueId()).getCurrentCash() < price.getCashBuyPrice()) {
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_cash"));
                 return false;
             }
-            cashUsers.get(p.getUniqueId()).spendCash(price.getCashBuyPrice());
+            udata.get(p.getUniqueId()).spendCash(price.getCashBuyPrice());
         } else if (currency == Currency.MILEAGE) {
-            if (cashUsers.get(p.getUniqueId()).getCurrentMileage() < price.getMileageBuyPrice()) {
-                p.sendMessage(prefix + lang.getWithArgs("shop_err_no_mileage"));
+            if (udata.get(p.getUniqueId()).getCurrentMileage() < price.getMileageBuyPrice()) {
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_mileage"));
                 return false;
             }
-            cashUsers.get(p.getUniqueId()).spendMileage(price.getMileageBuyPrice());
+            udata.get(p.getUniqueId()).spendMileage(price.getMileageBuyPrice());
         }
         p.getInventory().addItem(item.clone());
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_buy", String.valueOf(item.getAmount()), item.getType().name(), shopName));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_buy", String.valueOf(item.getAmount()), item.getType().name(), shopName));
         return true;
     }
 
     public static boolean sellItem(Player p, String shopName, int page, int slot, Currency currency) {
         if (!isShopExists(shopName)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", shopName));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", shopName));
             return false;
         }
         Shop shop = shops.get(shopName);
         ShopPrices price = shop.findPrice(page, slot);
         if (price == null) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_price"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_price"));
             return false;
         }
         if (currency == Currency.CASH && price.getCashSellPrice() <= 0) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_cash_sell"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_cash_sell"));
             return false;
         }
         if (currency == Currency.MILEAGE && price.getMileageSellPrice() <= 0) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_mileage_sell"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_mileage_sell"));
             return false;
         }
         ItemStack item = shop.findItem(page, slot);
         if (item == null || item.getType() == org.bukkit.Material.AIR) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_item"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_item"));
             return false;
         }
         if (!p.getInventory().containsAtLeast(item, item.getAmount())) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_no_have_item"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_no_have_item"));
             return false;
         }
         if (currency == Currency.CASH) {
-            cashUsers.get(p.getUniqueId()).addCash(price.getCashSellPrice());
+            udata.get(p.getUniqueId()).addCash(price.getCashSellPrice());
         } else if (currency == Currency.MILEAGE) {
-            cashUsers.get(p.getUniqueId()).addMileage(price.getMileageSellPrice());
+            udata.get(p.getUniqueId()).addMileage(price.getMileageSellPrice());
         }
         p.getInventory().removeItem(item.clone());
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_sell", String.valueOf(item.getAmount()), item.getType().name(), shopName));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_sell", String.valueOf(item.getAmount()), item.getType().name(), shopName));
         return true;
     }
 
     public static void deleteShop(Player p, String name) {
         if (!isShopExists(name)) {
-            p.sendMessage(prefix + lang.getWithArgs("shop_err_not_exist", name));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_err_not_exist", name));
             return;
         }
         new File(plugin.getDataFolder(), "shops/" + name + ".yml").delete();
         shops.remove(name);
-        p.sendMessage(prefix + lang.getWithArgs("shop_msg_delete_success", name));
+        p.sendMessage(plugin.getPrefix() + plugin.getLang().getWithArgs("shop_msg_delete_success", name));
     }
 }

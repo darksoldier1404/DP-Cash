@@ -9,11 +9,10 @@ import com.darksoldier1404.dpcash.functions.CommonFunction;
 import com.darksoldier1404.dpcash.obj.CashUser;
 import com.darksoldier1404.dpcash.obj.Shop;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
-import com.darksoldier1404.dppc.lang.DLang;
+import com.darksoldier1404.dppc.data.DPlugin;
+import com.darksoldier1404.dppc.data.DataContainer;
+import com.darksoldier1404.dppc.data.DataType;
 import com.darksoldier1404.dppc.utils.Triple;
-import com.darksoldier1404.dppc.utils.Tuple;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,29 +20,32 @@ import java.util.UUID;
 
 import static com.darksoldier1404.dppc.utils.PluginUtil.addPlugin;
 
-public class CashPlugin extends JavaPlugin {
+public class CashPlugin extends DPlugin {
     public static CashPlugin plugin;
-    public static YamlConfiguration config;
-    public static DLang lang;
-    public static String prefix;
-    public static final Map<UUID, CashUser> cashUsers = new HashMap<>();
-    public static final Map<String, Shop> shops = new HashMap<>();
+    public static DataContainer<UUID, CashUser> udata;
+    public static DataContainer<String, Shop> shops;
     public static final Map<UUID, Triple<Integer, DInventory, Currency>> currentEdit = new HashMap<>();
 
     public static CashPlugin getInstance() {
         return plugin;
     }
 
+    public CashPlugin() {
+        super(true);
+        plugin = this;
+    }
+
     @Override
     public void onLoad() {
-        plugin = this;
+        init();
         addPlugin(plugin, 26291);
+        udata = loadDataContainer(new DataContainer<UUID, CashUser>(this, DataType.CUSTOM, "users"), CashUser.class);
+        shops = loadDataContainer(new DataContainer<String, Shop>(this, DataType.CUSTOM, "shops"), Shop.class);
         CommonFunction.initPlaceholders();
     }
 
     @Override
     public void onEnable() {
-        CommonFunction.init();
         getServer().getPluginManager().registerEvents(new DPCEvents(), plugin);
         getCommand("cashshop").setExecutor(new CashShopCommand().getExecutor());
         getCommand("cash").setExecutor(new CashCommand().getExecutor());
@@ -52,6 +54,6 @@ public class CashPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        CommonFunction.saveConfig();
+        saveDataContainer();
     }
 }
