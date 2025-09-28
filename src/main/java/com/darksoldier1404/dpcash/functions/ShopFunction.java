@@ -60,7 +60,7 @@ public class ShopFunction {
     }
 
     public static void saveShops() {
-        plugin.saveDataContainer();
+        shops.saveAll();
     }
 
     public static void openShop(Player p, String name) {

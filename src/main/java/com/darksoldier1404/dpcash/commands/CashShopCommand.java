@@ -53,7 +53,7 @@ public class CashShopCommand {
             if (args.length == 2) {
                 ShopFunction.deleteShop((Player) p, args[1]);
             } else {
-                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_delete_usage"));
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("cashshop_cmd_delete"));
             }
             return true;
         });

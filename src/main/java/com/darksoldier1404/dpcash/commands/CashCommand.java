@@ -11,7 +11,7 @@ public class CashCommand {
     private final CommandBuilder builder = new CommandBuilder(plugin);
 
     public CashCommand() {
-        builder.addSubCommand("give", "dpcash.admin", plugin.getLang().get("cash_cmd_give"), (p, args) -> {
+        builder.addSubCommand("give", "dpcash.admin", plugin.getLang().get("cash_cmd_set"), (p, args) -> {
             if (args.length == 3) {
                 if (args[2].matches("\\d+")) {
                     OfflinePlayer target = CommonFunction.getOfflinePlayer(args[1]);

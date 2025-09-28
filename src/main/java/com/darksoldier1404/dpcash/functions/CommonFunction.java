@@ -6,6 +6,8 @@ import com.darksoldier1404.dppc.utils.ConfigUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 import static com.darksoldier1404.dpcash.CashPlugin.*;
 
 public class CommonFunction {
@@ -67,24 +69,22 @@ public class CommonFunction {
     }
 
     public static void initUser(Player p) {
-        CashUser cu = new CashUser(p.getUniqueId()).deserialize(ConfigUtils.initUserData(plugin, p.getUniqueId().toString(), "users"));
+        UUID uuid = p.getUniqueId();
+        CashUser cu = new CashUser(uuid).deserialize(ConfigUtils.initUserData(plugin, uuid.toString(), "users"));
         if (cu == null) {
-            cu = new CashUser(p.getUniqueId());
-            saveUser(cu);
+            cu = new CashUser(uuid);
+            saveUser(uuid);
         }
-        udata.put(p.getUniqueId(), cu);
+        udata.put(uuid, cu);
     }
 
     public static void saveUserAndQuit(Player p) {
-        CashUser cu = udata.get(p.getUniqueId());
-        if (cu != null) {
-            saveUser(cu);
-            udata.remove(p.getUniqueId());
-        }
+        saveUser(p.getUniqueId());
+        udata.remove(p.getUniqueId());
     }
 
-    public static void saveUser(CashUser cu) {
-        ConfigUtils.saveCustomData(plugin, cu.serialize(), cu.getUUID().toString(), "users");
+    public static void saveUser(UUID uuid) {
+        udata.save(uuid);
     }
 
     public static CashUser getCashUser(Player p) {
