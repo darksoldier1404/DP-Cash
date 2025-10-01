@@ -66,9 +66,6 @@ public class DPCEvents implements Listener {
                 }
                 if (inv.isValidChannel(0)) {
                     e.setCancelled(true);
-                    if (e.getClickedInventory() != null && e.getClickedInventory().getType() == InventoryType.PLAYER) {
-                        return;
-                    }
                     switch (shop.getType()) {
                         case CASH:
                             if (clickType == ClickType.LEFT) {

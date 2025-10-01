@@ -39,7 +39,7 @@ public class CashPlugin extends DPlugin {
     public void onLoad() {
         init();
         addPlugin(plugin, 26291);
-        udata = loadDataContainer(new DataContainer<>(plugin, DataType.USER, "users"));
+        udata = loadDataContainer(new DataContainer<>(plugin, DataType.CUSTOM, "users"));
         shops = loadDataContainer(new DataContainer<>(this, DataType.CUSTOM, "shops"), Shop.class);
         CommonFunction.initPlaceholders();
         saveDataContainer();
